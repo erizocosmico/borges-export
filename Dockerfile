@@ -7,7 +7,7 @@ RUN mkdir -p /opt/borges-export
 
 WORKDIR /opt/borges-export
 
-ADD export /bin/borges-export
+ADD borges-export /bin/
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 CMD ["borges-export", "-debug"]
