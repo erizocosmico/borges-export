@@ -6,14 +6,15 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 	"sort"
 	"strings"
 	"time"
 
 	"github.com/hhatto/gocloc"
-	"github.com/ryanuber/go-license"
 	"github.com/sirupsen/logrus"
+	"github.com/vmarkovtsev/go-license"
 	"gopkg.in/src-d/core-retrieval.v0"
 	"gopkg.in/src-d/core-retrieval.v0/model"
 	"gopkg.in/src-d/core-retrieval.v0/repository"
@@ -26,12 +27,29 @@ import (
 func main() {
 	output := flag.String("o", "result.csv", "csv file path with the results")
 	debug := flag.Bool("debug", false, "show debug logs")
+	logfile := flag.String("logfile", "", "write logs to file")
 	flag.Parse()
 
 	if *debug {
 		logrus.SetLevel(logrus.DebugLevel)
 	} else {
 		logrus.SetLevel(logrus.InfoLevel)
+	}
+
+	if *logfile != "" {
+		_ = os.Remove(*logfile)
+		f, err := os.Create(*logfile)
+		if err != nil {
+			logrus.WithField("err", err).Fatalf("unable to create log file: %s", *logfile)
+		}
+
+		defer func() {
+			if err := f.Close(); err != nil {
+				logrus.WithField("err", err).Error("unable to close log file")
+			}
+		}()
+
+		logrus.SetOutput(f)
 	}
 
 	store := core.ModelRepositoryStore()
@@ -92,6 +110,17 @@ func writeResult(file string, repos []*Repository) {
 		logrus.WithField("elapsed", time.Since(start)).Debug("finished writing result")
 	}()
 
+	if _, err := os.Stat(file); err != nil && !os.IsNotExist(err) {
+		logrus.WithField("err", err).WithField("file", file).
+			Fatal("unexpected error reading file")
+	} else if err == nil {
+		logrus.WithField("file", file).Warn("file exists, it will be deleted")
+		if err := os.Remove(file); err != nil {
+			logrus.WithField("err", err).WithField("file", file).
+				Fatal("unable to remove file")
+		}
+	}
+
 	var buf bytes.Buffer
 	w := csv.NewWriter(&buf)
 	if err := w.Write(csvHeader); err != nil {
@@ -146,14 +175,21 @@ func repoData(repo *git.Repository, dbRepo *model.Repository) (*Repository, erro
 		return nil, fmt.Errorf("unable to get lang report: %s", err)
 	}
 
-	/*
-		TODO: not supported yet
-		lines, err := lineCounts(path, files)
-		if err != nil {
-			return nil, err
+	path, err := writeToTempDir(files)
+	if err != nil {
+		return nil, fmt.Errorf("unable to write files to temp dir: %s", err)
+	}
+
+	defer func() {
+		if err := os.RemoveAll(path); err != nil {
+			logrus.WithField("dir", path).Error("unable to remove temp dir")
 		}
-	*/
-	lines := make(map[string]LineCounts)
+	}()
+
+	lines, err := lineCounts(path, files)
+	if err != nil {
+		return nil, err
+	}
 
 	data.Languages = mergeLanguageData(langs, lines)
 
@@ -603,4 +639,39 @@ func setForks(repos []*Repository) {
 		}
 	}
 	logrus.WithField("elapsed", time.Since(start)).Debug("finished setting forks for repositories")
+}
+
+func writeToTempDir(files []*object.File) (base string, err error) {
+	base, err = ioutil.TempDir(os.TempDir(), "borges-export")
+	if err != nil {
+		return "", fmt.Errorf("unable to create temp dir: %s", err)
+	}
+
+	defer func() {
+		if err != nil {
+			if removeErr := os.RemoveAll(base); removeErr != nil {
+				logrus.Errorf("unable to remove temp dir after error (%s): %s", removeErr, err)
+			}
+		}
+	}()
+
+	for _, f := range files {
+		path := filepath.Join(base, f.Name)
+		if err = os.MkdirAll(filepath.Dir(path), 0744); err != nil {
+			return "", err
+		}
+
+		var content string
+		content, err = f.Contents()
+		if err != nil {
+			return "", err
+		}
+
+		err = ioutil.WriteFile(path, []byte(content), 0644)
+		if err != nil {
+			return "", err
+		}
+	}
+
+	return base, nil
 }

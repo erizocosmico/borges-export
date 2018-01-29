@@ -132,11 +132,6 @@
   version = "v0.8.0"
 
 [[projects]]
-  name = "github.com/ryanuber/go-license"
-  packages = ["."]
-  revision = "3878fc8f33ea4637cf02cf8a0bf926288a246ceb"
-
-[[projects]]
   name = "github.com/satori/go.uuid"
   packages = ["."]
   revision = "36e9d2ebbde5e3f13ab2e25625fd453271d6522e"
@@ -175,6 +170,11 @@
   name = "github.com/toqueteos/trie"
   packages = ["."]
   revision = "56fed4a05683322f125e2d78ee269bb102280392"
+
+[[projects]]
+  name = "github.com/vmarkovtsev/go-license"
+  packages = ["."]
+  revision = "81c7fb38c06c5466a308765e988763a67ecfc542"
 
 [[projects]]
   branch = "master"
@@ -451,6 +451,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "3cba2a496c17db55fb0206a63810c242b5c800d64bb8f9349537c5f2a3093099"
+  inputs-digest = "08737ace52826c0ea4529ffa16b7ef618ded8938819cdb696a5ee4cd6a339c9f"
   solver-name = "gps-cdcl"
   solver-version = 1

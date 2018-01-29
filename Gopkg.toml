@@ -30,8 +30,8 @@
   name = "github.com/hhatto/gocloc"
 
 [[constraint]]
-  revision = "3878fc8f33ea4637cf02cf8a0bf926288a246ceb"
-  name = "github.com/ryanuber/go-license"
+  revision = "81c7fb38c06c5466a308765e988763a67ecfc542"
+  name = "github.com/vmarkovtsev/go-license"
 
 [[constraint]]
   name = "github.com/sirupsen/logrus"
