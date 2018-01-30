@@ -26,8 +26,8 @@
 
 
 [[constraint]]
-  revision = "259fe0ac4b12010a9dd69a4770506c87217d3a03"
-  name = "github.com/hhatto/gocloc"
+  name = "github.com/erizocosmico/gocloc"
+  branch = "master"
 
 [[constraint]]
   revision = "81c7fb38c06c5466a308765e988763a67ecfc542"

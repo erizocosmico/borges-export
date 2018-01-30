@@ -68,8 +68,8 @@ func isVCSDir(path string) bool {
 
 // getAllFiles return all of the files to be analyzed in paths.
 func getAllFiles(paths []string, languages *DefinedLanguages, opts *ClocOptions) (result map[string]*Language, err error) {
-	fileCache := make(map[string]struct{})
 	result = make(map[string]*Language, 0)
+	fileCache := make(map[string]struct{})
 
 	for _, root := range paths {
 		vcsInRoot := isVCSDir(root)

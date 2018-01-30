@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/hhatto/gocloc"
+	"github.com/erizocosmico/gocloc"
 	"github.com/sirupsen/logrus"
 	"github.com/vmarkovtsev/go-license"
 	"gopkg.in/src-d/core-retrieval.v0/model"

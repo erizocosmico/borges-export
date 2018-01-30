@@ -33,6 +33,12 @@
   version = "v3.2.15"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/erizocosmico/gocloc"
+  packages = ["."]
+  revision = "ca5e3a5ee5ae1a74ffa2cfcdddfe19ce49948818"
+
+[[projects]]
   name = "github.com/go-stack/stack"
   packages = ["."]
   revision = "259ab82a6cad3992b4e21ff5cac294ccb06474bc"
@@ -50,11 +56,6 @@
     "ptypes/timestamp"
   ]
   revision = "925541529c1fa6821df4e44ce2723319eb2be768"
-
-[[projects]]
-  name = "github.com/hhatto/gocloc"
-  packages = ["."]
-  revision = "259fe0ac4b12010a9dd69a4770506c87217d3a03"
 
 [[projects]]
   branch = "master"
@@ -451,6 +452,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "08737ace52826c0ea4529ffa16b7ef618ded8938819cdb696a5ee4cd6a339c9f"
+  inputs-digest = "05176533b21601aee3e219cc0c6ab9b6bb48cfe47cc64d520959134d727f73a9"
   solver-name = "gps-cdcl"
   solver-version = 1
