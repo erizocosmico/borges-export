@@ -126,6 +126,7 @@ func processRepos(
 
 	go func() {
 		var wg sync.WaitGroup
+		logrus.Debug("start processing")
 
 		for rs.Next() {
 			failed++
@@ -138,6 +139,7 @@ func processRepos(
 			wg.Add(1)
 			ws.do(func() {
 				log := logrus.WithField("repo", repo.ID)
+				log.Debug("starting worker")
 				data, err := newProcessor(repo, txer, locker).process()
 				if err != nil {
 					log.WithField("err", err).Error("unable to process repository")
@@ -146,11 +148,13 @@ func processRepos(
 
 				ch <- data
 				wg.Done()
+				log.Debug("stopping worker")
 			})
 		}
 
 		wg.Wait()
 		close(ch)
+		logrus.Debug("finished processing")
 	}()
 
 	for data := range ch {
@@ -229,7 +233,9 @@ func (p *processor) process() (*repositoryData, error) {
 	mut.Unlock()
 	_ = tx.Rollback()
 
+	log = logrus.WithField("repo", data.URL)
 	for init := range inits {
+		log.WithField("init", init.String()).Debug("processing init")
 		mut := p.locker.lock(init.String())
 		mut.Lock()
 		err := func() error {
@@ -281,6 +287,8 @@ func (p *processor) process() (*repositoryData, error) {
 
 			return nil
 		}()
+
+		log.WithField("init", init.String()).Debug("finished processing init")
 
 		if err != nil {
 			return nil, err
