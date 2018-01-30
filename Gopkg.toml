@@ -30,8 +30,8 @@
   branch = "master"
 
 [[constraint]]
-  revision = "81c7fb38c06c5466a308765e988763a67ecfc542"
-  name = "github.com/vmarkovtsev/go-license"
+  name = "gopkg.in/src-d/go-license-detector.v1"
+  version = "1"
 
 [[constraint]]
   name = "github.com/sirupsen/logrus"

@@ -34,6 +34,18 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/dgryski/go-minhash"
+  packages = ["."]
+  revision = "7fe510aff544695d5ca79be4cddc5dafd0e02fa4"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/ekzhu/minhash-lsh"
+  packages = ["."]
+  revision = "5c06ee8586a1691fbfa230842170429e2b31cc05"
+
+[[projects]]
+  branch = "master"
   name = "github.com/erizocosmico/gocloc"
   packages = ["."]
   revision = "ca5e3a5ee5ae1a74ffa2cfcdddfe19ce49948818"
@@ -56,6 +68,12 @@
     "ptypes/timestamp"
   ]
   revision = "925541529c1fa6821df4e44ce2723319eb2be768"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/hhatto/gorst"
+  packages = ["."]
+  revision = "7682c8a25108341db7cb791ee424fb9ca53a691b"
 
 [[projects]]
   branch = "master"
@@ -144,6 +162,12 @@
   version = "v1.0.0"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/shurcooL/sanitized_anchor_name"
+  packages = ["."]
+  revision = "86672fcb3f950f35f2e675df2240550f2a50762f"
+
+[[projects]]
   name = "github.com/sirupsen/logrus"
   packages = ["."]
   revision = "d682213848ed68c0a260ca37d6dd5ace8423f5ba"
@@ -173,11 +197,6 @@
   revision = "56fed4a05683322f125e2d78ee269bb102280392"
 
 [[projects]]
-  name = "github.com/vmarkovtsev/go-license"
-  packages = ["."]
-  revision = "81c7fb38c06c5466a308765e988763a67ecfc542"
-
-[[projects]]
   branch = "master"
   name = "github.com/xanzy/ssh-agent"
   packages = ["."]
@@ -205,6 +224,12 @@
     "ssh/terminal"
   ]
   revision = "0efb9460aaf800c6376acf625be2853bceac2e06"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/exp"
+  packages = ["rand"]
+  revision = "072991165226c11c888c881218850e8318c2b32e"
 
 [[projects]]
   branch = "master"
@@ -249,6 +274,31 @@
     "unicode/rangetable"
   ]
   revision = "e19ae1496984b1c655b8044a65c0300a3c878dd3"
+
+[[projects]]
+  branch = "master"
+  name = "gonum.org/v1/gonum"
+  packages = [
+    "blas",
+    "blas/blas64",
+    "blas/gonum",
+    "floats",
+    "internal/asm/c128",
+    "internal/asm/f32",
+    "internal/asm/f64",
+    "internal/math32",
+    "lapack",
+    "lapack/gonum",
+    "lapack/lapack64",
+    "mat",
+    "mathext",
+    "mathext/internal/amos",
+    "mathext/internal/cephes",
+    "mathext/internal/gonum",
+    "stat",
+    "stat/distuv"
+  ]
+  revision = "870bcdceb64d7ebcf96f33e1c3d89eb1ec3bbd8a"
 
 [[projects]]
   name = "google.golang.org/appengine"
@@ -310,6 +360,12 @@
   packages = ["."]
   revision = "0decfc6c20d9ca0ad143b0e89dcaa20f810b4fb3"
   version = "v2.13"
+
+[[projects]]
+  name = "gopkg.in/russross/blackfriday.v2"
+  packages = ["."]
+  revision = "cadec560ec52d93835bf2f15bd794700d3a2473b"
+  version = "v2.0.0"
 
 [[projects]]
   name = "gopkg.in/src-d/core-retrieval.v0"
@@ -423,6 +479,12 @@
   version = "v1.3.3"
 
 [[projects]]
+  name = "gopkg.in/src-d/go-license-detector.v1"
+  packages = ["."]
+  revision = "fe58458d03ea33e33f82a493c8cc18b51575ef0f"
+  version = "v1"
+
+[[projects]]
   name = "gopkg.in/src-d/go-siva.v1"
   packages = ["."]
   revision = "b4cd504f9d6e57728058609e4540e931fbd41220"
@@ -452,6 +514,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "05176533b21601aee3e219cc0c6ab9b6bb48cfe47cc64d520959134d727f73a9"
+  inputs-digest = "e43c574a56d452343738e4870f1c4d0a7b290837b84a8a7c5daf9dcc49ad46d6"
   solver-name = "gps-cdcl"
   solver-version = 1

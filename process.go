@@ -13,13 +13,13 @@ import (
 
 	"github.com/erizocosmico/gocloc"
 	"github.com/sirupsen/logrus"
-	"github.com/vmarkovtsev/go-license"
 	"gopkg.in/src-d/core-retrieval.v0/model"
 	"gopkg.in/src-d/core-retrieval.v0/repository"
 	"gopkg.in/src-d/enry.v1"
 	"gopkg.in/src-d/go-git.v4"
 	"gopkg.in/src-d/go-git.v4/plumbing"
 	"gopkg.in/src-d/go-git.v4/plumbing/object"
+	"gopkg.in/src-d/go-license-detector.v1"
 )
 
 type repositoryData struct {
@@ -31,7 +31,7 @@ type repositoryData struct {
 	Commits     int64
 	Branches    int
 	Forks       int
-	License     string
+	License     map[string]float32
 }
 
 func (r repositoryData) toRecord() []string {
@@ -60,6 +60,17 @@ func (r repositoryData) toRecord() []string {
 		langCommentLines[i] = fmt.Sprint(l.Lines.Comments)
 	}
 
+	var licenseNames []string
+	for lic := range r.License {
+		licenseNames = append(licenseNames, lic)
+	}
+	sort.Strings(licenseNames)
+
+	var licenses = make([]string, len(licenseNames))
+	for i, name := range licenseNames {
+		licenses[i] = fmt.Sprintf("%s:%.3f", name, r.License[name])
+	}
+
 	return []string{
 		r.URL,                     // "URL"
 		join(r.SivaFiles),         // "SIVA_FILENAMES"
@@ -74,7 +85,7 @@ func (r repositoryData) toRecord() []string {
 		join(langEmptyLines),      // "EMPTY_LINES_COUNT"
 		join(langCodeLines),       // "CODE_LINES_COUNT"
 		join(langCommentLines),    // "COMMENT_LINES_COUNT"
-		r.License,                 // "LICENSE"
+		join(licenses),            // "LICENSE"
 	}
 }
 
@@ -359,7 +370,7 @@ func (p *processor) data() (*repositoryData, error) {
 		return nil, fmt.Errorf("unable to get head commits: %s", err)
 	}
 
-	data.License, err = p.repositoryLicense(files)
+	data.License, err = ld.InvestigateProjectLicenses(path)
 	if err != nil {
 		return nil, fmt.Errorf("unable to get license: %s", err)
 	}
@@ -454,35 +465,6 @@ func (p *processor) lineCounts(path string, files []*object.File) (map[string]li
 	}
 
 	return lcounts, nil
-}
-
-func (p *processor) repositoryLicense(files []*object.File) (string, error) {
-	for _, f := range files {
-		if isLicenseFile(f) {
-			content, err := f.Contents()
-			if err != nil {
-				return "", fmt.Errorf("can't get contents of file: %s", err)
-			}
-			lic := license.License{Text: content}
-			if err := lic.GuessType(); err != nil && err != license.ErrUnrecognizedLicense {
-				return "", fmt.Errorf("can't guess license type: %s", err)
-			}
-
-			return lic.Type, nil
-		}
-	}
-
-	return "", nil
-}
-
-func isLicenseFile(file *object.File) bool {
-	name := strings.ToLower(file.Name)
-	for _, lf := range license.DefaultLicenseFiles {
-		if lf == name {
-			return true
-		}
-	}
-	return false
 }
 
 func (p *processor) headCommits(head *plumbing.Reference) (int64, error) {
