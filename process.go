@@ -124,7 +124,7 @@ type lineCounts struct {
 func processRepos(
 	txer repository.RootedTransactioner,
 	rs *model.RepositoryResultSet,
-) (repos []*repositoryData, processed int, failed int) {
+) <-chan *repositoryData {
 	logrus.WithField("workers", runtime.NumCPU()).Info("start processing repos")
 	start := time.Now()
 	defer func() {
@@ -140,7 +140,6 @@ func processRepos(
 		logrus.Debug("start processing")
 
 		for rs.Next() {
-			failed++
 			repo, err := rs.Get()
 			if err != nil {
 				logrus.WithField("err", err).Error("unable to get next repository")
@@ -168,15 +167,7 @@ func processRepos(
 		logrus.Debug("finished processing")
 	}()
 
-	for data := range ch {
-		if data != nil {
-			repos = append(repos, data)
-			processed++
-			failed--
-		}
-	}
-
-	return
+	return ch
 }
 
 type processor struct {
@@ -244,7 +235,7 @@ func (p *processor) process() (*repositoryData, error) {
 	mut.Unlock()
 	_ = tx.Rollback()
 
-	log = logrus.WithField("repo", data.URL)
+	log = log.WithField("url", data.URL)
 	for init := range inits {
 		log.WithField("init", init.String()).Debug("processing init")
 		mut := p.locker.lock(init.String())

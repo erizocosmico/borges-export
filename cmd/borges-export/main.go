@@ -14,6 +14,7 @@ func main() {
 	debug := flag.Bool("debug", false, "show debug logs")
 	logfile := flag.String("logfile", "", "write logs to file")
 	limit := flag.Uint64("limit", 0, "max number of repositories to process")
+	offset := flag.Uint64("offset", 0, "skip initial n repositories")
 	flag.Parse()
 
 	if *debug {
@@ -43,5 +44,6 @@ func main() {
 		core.RootedTransactioner(),
 		*output,
 		*limit,
+		*offset,
 	)
 }
