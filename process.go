@@ -372,7 +372,9 @@ func (p *processor) data() (*repositoryData, error) {
 
 	data.License, err = ld.InvestigateProjectLicenses(path)
 	if err != nil {
-		return nil, fmt.Errorf("unable to get license: %s", err)
+		data.License = make(map[string]float32)
+		logrus.WithField("repo", data.URL).WithField("err", err).
+			Warn("unable to get license for repository")
 	}
 
 	return &data, nil
