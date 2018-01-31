@@ -149,6 +149,7 @@ func processRepos(
 
 			wg.Add(1)
 			ws.do(func() {
+				defer wg.Done()
 				log := logrus.WithField("repo", repo.ID)
 				log.Debug("starting worker")
 				data, err := newProcessor(repo, txer, locker).process()
@@ -158,7 +159,6 @@ func processRepos(
 				}
 
 				ch <- data
-				wg.Done()
 				log.Debug("stopping worker")
 			})
 		}
@@ -476,7 +476,7 @@ func (p *processor) headCommits(head *plumbing.Reference) (int64, error) {
 
 	ci, err := p.repo.Log(&git.LogOptions{From: head.Hash()})
 	if err != nil {
-		return -1, fmt.Errorf("can't get HEAD log: %s", err)
+		return -1, fmt.Errorf("can't get HEAD log (head is %s): %s", head.Hash(), err)
 	}
 
 	return countCommits(ci)
@@ -560,7 +560,7 @@ func (p *processor) headFiles(head *plumbing.Reference) ([]*object.File, error) 
 
 	ci, err := p.repo.Log(&git.LogOptions{From: head.Hash()})
 	if err != nil {
-		return nil, fmt.Errorf("can't get HEAD log: %s", err)
+		return nil, fmt.Errorf("unable to get HEAD log (head is %s): %s", head.Hash(), err)
 	}
 
 	commit, err := ci.Next()
