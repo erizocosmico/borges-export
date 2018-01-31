@@ -13,6 +13,7 @@ func main() {
 	output := flag.String("o", "result.csv", "csv file path with the results")
 	debug := flag.Bool("debug", false, "show debug logs")
 	logfile := flag.String("logfile", "", "write logs to file")
+	limit := flag.Uint64("limit", 0, "max number of repositories to process")
 	flag.Parse()
 
 	if *debug {
@@ -41,5 +42,6 @@ func main() {
 		core.ModelRepositoryStore(),
 		core.RootedTransactioner(),
 		*output,
+		*limit,
 	)
 }

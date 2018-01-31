@@ -18,9 +18,13 @@ func Export(
 	store *model.RepositoryStore,
 	txer repository.RootedTransactioner,
 	outputFile string,
+	limit uint64,
 ) {
-	rs, err := store.Find(model.NewRepositoryQuery().
-		FindByStatus(model.Fetched))
+	query := model.NewRepositoryQuery().FindByStatus(model.Fetched)
+	if limit > 0 {
+		query = query.Limit(limit)
+	}
+	rs, err := store.Find(query)
 	if err != nil {
 		logrus.Fatal(err)
 	}
