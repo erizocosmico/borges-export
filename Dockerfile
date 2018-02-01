@@ -8,6 +8,7 @@ RUN mkdir -p /opt/borges-export
 WORKDIR /opt/borges-export
 
 ADD borges-export /bin/
+ADD set-forks /bin/
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 CMD ["borges-export", "-debug"]

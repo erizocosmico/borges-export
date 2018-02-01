@@ -575,24 +575,6 @@ func (p *processor) headFiles(head *plumbing.Reference) ([]*object.File, error) 
 	return files, err
 }
 
-func setForks(repos []*repositoryData) {
-	logrus.Debug("setting forks for repositories")
-	start := time.Now()
-	var reposBySiva = make(map[string][]string)
-	for _, r := range repos {
-		for _, s := range r.SivaFiles {
-			reposBySiva[s] = append(reposBySiva[s], r.URL)
-		}
-	}
-
-	for _, r := range repos {
-		for _, s := range r.SivaFiles {
-			r.Forks += len(reposBySiva[s]) - 1 // don't take self into account
-		}
-	}
-	logrus.WithField("elapsed", time.Since(start)).Debug("finished setting forks for repositories")
-}
-
 func writeToTempDir(files []*object.File) (base string, err error) {
 	base, err = ioutil.TempDir(os.TempDir(), "borges-export")
 	if err != nil {

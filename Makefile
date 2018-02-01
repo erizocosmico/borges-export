@@ -15,4 +15,5 @@ $(MAKEFILE):
 -include $(MAKEFILE)
 
 build:
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags norwfs ./cmd/borges-export/...
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags norwfs ./cmd/borges-export/...;
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build ./cmd/set-forks/...;
