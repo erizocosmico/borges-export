@@ -481,7 +481,7 @@
 [[projects]]
   name = "gopkg.in/src-d/go-license-detector.v1"
   packages = ["."]
-  revision = "fe58458d03ea33e33f82a493c8cc18b51575ef0f"
+  revision = "4faf1fd1f234c23a8cfd2dcb22043b6187bb1eef"
   version = "v1"
 
 [[projects]]
@@ -514,6 +514,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "e43c574a56d452343738e4870f1c4d0a7b290837b84a8a7c5daf9dcc49ad46d6"
+  inputs-digest = "fa9a4b73554b44512685c414058cb2c5e0806db148ac4b04ccb8c2ec9a7416f4"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -72,13 +72,11 @@ func Export(
 
 func createOutputFile(outputFile string) (*os.File, error) {
 	if _, err := os.Stat(outputFile); err != nil && !os.IsNotExist(err) {
-		logrus.WithField("err", err).WithField("file", outputFile).
-			Fatal("unexpected error reading file")
+		return nil, err
 	} else if err == nil {
 		logrus.WithField("file", outputFile).Warn("file exists, it will be deleted")
 		if err := os.Remove(outputFile); err != nil {
-			logrus.WithField("err", err).WithField("file", outputFile).
-				Fatal("unable to remove file")
+			return nil, err
 		}
 	}
 
