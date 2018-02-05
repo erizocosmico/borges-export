@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"os"
 	"os/signal"
+	"time"
 
 	"github.com/sirupsen/logrus"
 	"gopkg.in/src-d/core-retrieval.v0/model"
@@ -95,6 +96,11 @@ func getResultSet(
 	if limit > 0 {
 		query = query.Offset(offset)
 	}
+
+	query = query.Where(kallax.GtOrEq(
+		model.Schema.Repository.FetchedAt,
+		time.Date(2018, time.January, 30, 0, 0, 0, 0, time.Local),
+	))
 
 	total, err := store.Count(query)
 	if err != nil {
