@@ -15,5 +15,6 @@ $(MAKEFILE):
 -include $(MAKEFILE)
 
 build:
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -tags norwfs ./cmd/borges-export/...;
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build ./cmd/set-forks/...;
+	go get -v github.com/src-d/datasets/PublicGitArchive/borges-indexer/...;
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./borges-indexer -tags norwfs github.com/src-d/datasets/PublicGitArchive/borges-indexer/cmd/borges-indexer/...;
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./set-forks -tags norwfs github.com/src-d/datasets/PublicGitArchive/borges-indexer/cmd/set-forks/...;

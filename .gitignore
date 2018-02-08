@@ -16,3 +16,4 @@
 *.csv
 *-k8s.yaml
 *.log
+*.zip
